@@ -31,7 +31,5 @@ class BlogPostCategoryView(APIView):
         data = self.request.data
         category = data['category']
         queryset = BlogPost.objects.order_by('-date_created').filter(category__iexact=category)
-
         serializer = BlogPostSerializer(queryset, many=True)
-
         return Response(serializer.data)

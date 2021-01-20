@@ -2,38 +2,38 @@ from django.db import models
 from datetime import datetime
 from django.template.defaultfilters import slugify
 
-class Categories(models.Model):
-
-    category = models.CharField(max_length=50)
-
-    def __str__(self):
-        return self.category
-
-class Tag(models.Model):
-
-    name = models.CharField(max_length=200)
-
-    def __str__(self):
-        return self.name
+class Categories(models.TextChoices):
+    WORLD = 'world'
+    ENVIRONMENT = 'environment'
+    TECHNOLOGY = 'technology'
+    DESIGN = 'design'
+    CULTURE = 'culture'
+    BUSINESS = 'business'
+    POLITICS = 'politics'
+    OPINION = 'opinion'
+    SCIENCE = 'science'
+    HEALTH = 'health'
+    STYLE = 'style'
+    TRAVEL = 'travel'
 
 class BlogPost(models.Model):
     title = models.CharField(max_length=50)
+    subtitle = models.CharField(max_length=150)
     slug = models.SlugField()
-    category = models.ManyToManyField(Categories, null=True, blank=True)
-    tags = models.ManyToManyField(Tag, null=True, blank=True)
+    category = models.CharField(max_length=50, choices=Categories.choices, default=Categories.WORLD)
     thumbnail = models.ImageField(upload_to='photos/%Y/%m/%d/')
     content = models.TextField()
     featured = models.BooleanField(default=False)
     date_created = models.DateTimeField(default=datetime.now, blank=True)
 
     def save(self, *args, **kwargs):
-        main_slug = slugify(self.title)
-        queryset = BlogPost.objects.all().filter(slug__iexact=main_slug).count()
+        original_slug = slugify(self.title)
+        queryset = BlogPost.objects.all().filter(slug__iexact=original_slug).count()
 
         count = 1
-        slug = main_slug
+        slug = original_slug
         while(queryset):
-            slug = main_slug + '-' + str(count)
+            slug = original_slug + '-' + str(count)
             count += 1
             queryset = BlogPost.objects.all().filter(slug__iexact=slug).count()
 
