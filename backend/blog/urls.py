@@ -1,8 +1,9 @@
 from django.urls import path
-from .views import *
+from django.views.generic import TemplateView
+from .views import PostList, PostDetail
+app_name = 'blog'
+
 urlpatterns = [
-    path('', BlogPostListView.as_view()),
-    path('featured', BlogPostFeaturedView.as_view()),
-    path('category', BlogPostCategoryView.as_view()),
-    path('<slug>', BlogPostDetailView.as_view()),
+    path('<int:pk>/', PostDetail.as_view(), name='detailcreate'),
+    path('', PostList.as_view(), name='listcreate'),
 ]

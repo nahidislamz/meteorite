@@ -1,5 +1,6 @@
 from django.contrib import admin
-from django_summernote.admin import SummernoteModelAdmin
+from . import models
+'''from django_summernote.admin import SummernoteModelAdmin
 from .models import BlogPost
 
 class BlogPostAdmin(SummernoteModelAdmin):
@@ -10,4 +11,12 @@ class BlogPostAdmin(SummernoteModelAdmin):
     list_per_page = 25
     summernote_fields = ('content', )
 
-admin.site.register(BlogPost, BlogPostAdmin)
+admin.site.register(BlogPost, BlogPostAdmin)'''
+
+@admin.register(models.Post)
+class AuthorAdmin(admin.ModelAdmin):
+    list_display = ('title', 'id', 'status', 'slug', 'author')
+    prepopulated_fields = {'slug': ('title',), }
+
+
+admin.site.register(models.Category)

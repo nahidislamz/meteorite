@@ -1,35 +1,27 @@
-from rest_framework.response import Response
-from rest_framework import permissions
-from rest_framework.views import APIView
-from rest_framework.generics import ListAPIView, RetrieveAPIView
-from blog.models import BlogPost
-from blog.serializers import BlogPostSerializer
+from rest_framework import generics
+from blog.models import Post
+from .serializers import PostSerializer
+from rest_framework.permissions import SAFE_METHODS, IsAuthenticatedOrReadOnly, BasePermission, IsAdminUser, DjangoModelPermissions
 
-class BlogPostListView(ListAPIView):
-    queryset = BlogPost.objects.order_by('-date_created')
-    serializer_class = BlogPostSerializer
-    lookup_field = 'slug'
-    permission_classes = (permissions.AllowAny, )
 
-class BlogPostDetailView(RetrieveAPIView):
-    queryset = BlogPost.objects.order_by('-date_created')
-    serializer_class = BlogPostSerializer
-    lookup_field = 'slug'
-    permission_classes = (permissions.AllowAny, )
+class PostUserWritePermission(BasePermission):
+    message = 'Editing posts is restricted to the author only.'
 
-class BlogPostFeaturedView(ListAPIView):
-    queryset = BlogPost.objects.all().filter(featured=True)
-    serializer_class = BlogPostSerializer
-    lookup_field = 'slug'
-    permission_classes = (permissions.AllowAny, )
+    def has_object_permission(self, request, view, obj):
 
-class BlogPostCategoryView(APIView):
-    serializer_class = BlogPostSerializer
-    permission_classes = (permissions.AllowAny, )
+        if request.method in SAFE_METHODS:
+            return True
 
-    def post(self, request, format=None):
-        data = self.request.data
-        category = data['category']
-        queryset = BlogPost.objects.order_by('-date_created').filter(category__iexact=category)
-        serializer = BlogPostSerializer(queryset, many=True)
-        return Response(serializer.data)
+        return obj.author == request.user
+
+
+class PostList(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    queryset = Post.postobjects.all()
+    serializer_class = PostSerializer
+
+
+class PostDetail(generics.RetrieveUpdateDestroyAPIView, PostUserWritePermission):
+    permission_classes = [PostUserWritePermission]
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer

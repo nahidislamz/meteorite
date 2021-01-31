@@ -5,13 +5,12 @@ name = "pypi"
 
 [packages]
 django = "*"
-django-filter = "*"
 django-cors-headers = "*"
-django-summernote = "*"
+django-summernote = "==0.8.11.6"
 djangorestframework = "*"
 pillow = "*"
-psycopg2 = "*"
 psycopg2-binary = "*"
+djangorestframework-simplejwt = "*"
 
 [dev-packages]
 
