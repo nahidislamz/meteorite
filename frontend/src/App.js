@@ -1,21 +1,27 @@
+import React, { useEffect, useState } from 'react';
+import Posts from './components/posts/Posts';
+import PostLoadingComponent from './components/posts/LoadPosts';
+import axiosInstance from './Axios';
 
-import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Layout from './containers/Layout';
-import Blog from './components/Blog';
-import BlogDetail from './components/BlogDetail';
-import Category from './components/Category';
+function App() {
+	const PostLoading = PostLoadingComponent(Posts);
+	const [appState, setAppState] = useState({
+		loading: true,
+		posts: null,
+	});
 
-const App = () => (
-    <Router>
-        <Layout>
-            <Switch>
-                <Route exact path='/' component={Blog} />
-                <Route exact path='/category/:id' component={Category} />
-                <Route exact path='/blog/:id' component={BlogDetail} />
-            </Switch>
-        </Layout>
-    </Router>
-);
-
+	useEffect(() => {
+		axiosInstance.get().then((res) => {
+			const allPosts = res.data;
+			setAppState({ loading: false, posts: allPosts });
+			console.log(res.data);
+		});
+	}, [setAppState]);
+	return (
+		<div className="App">
+			<h1 style={{ fontSize: '25px',padding:40, }}>Latest Posts</h1>
+			<PostLoading isLoading={appState.loading} posts={appState.posts} />
+		</div>
+	);
+}
 export default App;

@@ -2,10 +2,10 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import CustomUserSerializer
+from .serializers import *
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import AllowAny
-
+from rest_framework.decorators import api_view
 
 class CustomUserCreate(APIView):
     permission_classes = [AllowAny]
@@ -32,3 +32,14 @@ class BlacklistTokenUpdateView(APIView):
             return Response(status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+class Protected(APIView):
+    def get(self, request):
+        return Response(data={'type': 'protected'})
+
+
+@api_view(['GET'])
+def current_user(request):
+    permission_classes = [AllowAny]
+    serializer = AuthorSerializer(request.user)
+    return Response(serializer.data)
