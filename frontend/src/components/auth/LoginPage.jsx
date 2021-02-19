@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 	avatar: {
 		margin: theme.spacing(1),
-		backgroundColor: theme.palette.secondary.main,
+		backgroundColor: '#6a6e87',
 	},
 	form: {
 		width: '100%', // Fix IE 11 issue.
@@ -70,7 +70,7 @@ const LoginPage = ({ loginUser, history }) => {
 						required
 						fullWidth
 						id="email"
-						label="email"
+						label="Email"
 						name="email"
 						value={state.email}
 						autoFocus
@@ -91,12 +91,12 @@ const LoginPage = ({ loginUser, history }) => {
 					/>
 					<FormControlLabel
 						control={<Checkbox value="remember" color="primary" />}
-						label="Remember me"
+						label="Remember Me"
 					/>
 					<Button
 						type="submit"
 						fullWidth
-						variant="contained"
+						variant="outlined"
 						color="primary"
 						className={classes.submit}
 					>
