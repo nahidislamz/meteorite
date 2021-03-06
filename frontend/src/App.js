@@ -19,7 +19,7 @@ function App() {
 	}, [setAppState]);
 	return (
 		<div className="App">
-			<h1 style={{ fontSize: '25px',padding:40, }}>Latest Posts</h1>
+			<h1 style={{ fontSize: '25px',paddingTop:40,paddingBottom:40, paddingLeft:180, }}>Latest Posts</h1>
 			<PostLoading isLoading={appState.loading} posts={appState.posts} />
 		</div>
 	);

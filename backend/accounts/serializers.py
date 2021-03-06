@@ -23,5 +23,6 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
-        model = NewUser
-        fields = ('user_name','email','first_name','last_name')
+        model = Author
+        fields = '__all__'
+        exclude = ('user',)

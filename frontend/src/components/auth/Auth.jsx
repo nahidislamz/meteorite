@@ -39,16 +39,3 @@ export const isAuthenticated = () => {
   return !!token;
 };
 
-export const currentUser = () => {
-  if (isAuthenticated) {
-    fetch('http://localhost:8000/api/user/current_user/', {
-      headers: {
-        Authorization: `JWT ${localStorage.getItem('access_token')}`
-      }
-    })
-      .then(res => res.json())
-      .then(json => {
-        this.setState({ username: json.username });
-      });
-  }
-}

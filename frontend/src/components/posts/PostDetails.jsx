@@ -31,6 +31,10 @@ const useStyles = makeStyles((theme) => ({
 		  margin: theme.spacing(1),
 		},
 	  },
+	text: {
+		marginTop:'4px',
+		marginLeft:'8px'
+	}
 }));
 
 export default function PostDetails() {
@@ -52,9 +56,7 @@ export default function PostDetails() {
 	const [data, setData] = useState({
 		posts: [],
 	});
-	const [userdata, setUserData] = useState({
-		userInfo: [],
-	});
+
 	useEffect(() => {
 		axiosInstance.get('post/' + slug).then((res) => {
 			setData({
@@ -65,24 +67,6 @@ export default function PostDetails() {
 	}, [setData]);
 
 
-	useEffect(()=>{
-
-		if (isAuthenticated) {
-			fetch('http://localhost:8000/api/user/current_user/', {
-			  headers: {
-				Authorization: `JWT ${localStorage.getItem('access_token')}`
-			  }
-			})
-			  .then(res => res.json())
-			  .then(json => {
-				  setUserData({
-					userInfo: json.userdata,
-				  });
-				console.log('USER:'+json.userdata)
-			  });
-		  }
-	
-	},[setUserData]);
 	
 
 	return (
@@ -103,13 +87,13 @@ export default function PostDetails() {
 				<Box display="flex" justifyContent="flex-start">
 					<Avatar alt="Profile Sharp" src="/static/images/avatar/1.jpg" />
 					<Typography
-						component="h3"
-						variant="h4"
+						component="h6"
+						variant="h6"
 						align="left"
 						color="textPrimary"
-						gutterBottom
+						className={classes.text}
 					>
-						{currentUser}{' '}
+					 Nahid
 					</Typography>{' '}
 				</Box>
 				<Box display="flex" justifyContent="flex-end">
